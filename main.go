@@ -1,9 +1,13 @@
 package main
 
 import (
+	"io"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
+	"fyne.io/fyne/v2/storage"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -68,4 +72,17 @@ func main() {
 		),
 	))
 	w.ShowAndRun()
+}
+
+func openFile(w fyne.Window, onLoad func([]byte)) {
+	d := dialog.NewFileOpen(func(rc fyne.URIReadCloser, err error) {
+		if err != nil || rc == nil {
+			return
+		}
+		defer rc.Close()
+		b, _ := io.ReadAll(rc)
+		onLoad(b)
+	}, w)
+	d.SetFilter(storage.NewExtensionFileFilter([]string{".txt", ".log", ".md", ".json", ".yaml", ".yml", ""}))
+	d.Show()
 }
