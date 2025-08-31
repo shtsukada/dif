@@ -3,6 +3,7 @@ package main
 import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
 )
 
@@ -29,5 +30,27 @@ func main() {
 		right.SetText("")
 		grid.SetText("")
 	})
+	swapBtn := widget.NewButton("Swap", func() {
+		l := left.Text
+		left.SetText(right.Text)
+		right.SetText(l)
+	})
+
+	openLeftBtn := widget.NewButton("Open←", func() {
+		openFile(w, func(b []byte) { left.SetText(string(b)) })
+	})
+	openRightBtn := widget.NewButton("Open→", func() {
+		openFile(w, func(b []byte) { left.SetText(string(b)) })
+	})
+	saveBtn := widget.NewButton("Save dif", func() {
+		saveDiff(w, grid)
+	})
+	topBar := container.NewHBox(
+		openLeftBtn, openRightBtn,
+		widget.NewSeparator(),
+		swapBtn, clearBtn,
+		widget.NewSeparator(),
+		diffBtn, saveBtn,
+	)
 
 }
