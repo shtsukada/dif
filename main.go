@@ -99,8 +99,8 @@ func saveDiff(w fyne.Window, grid *widget.TextGrid) {
 		}
 		defer uw.Close()
 		var buf bytes.Buffer
-		for _, row := range grid.Rows {
-			buf.WriteString(row.Text())
+		for i := range grid.Rows {
+			buf.WriteString(grid.RowText(i))
 			buf.WriteByte('\n')
 		}
 		_, _ = uw.Write(buf.Bytes())
