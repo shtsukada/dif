@@ -120,7 +120,7 @@ func doDiff(left, right string, grid *widget.TextGrid) {
 	out, _ := difflib.GetUnifiedDiffString(ud)
 	lines := strings.Split(strings.TrimRight(out, "\n"), "\n")
 
-	grid.SetText("")
+	grid.SetText("") // クリア
 	grid.Rows = nil
 
 	// 色定義
@@ -132,6 +132,7 @@ func doDiff(left, right string, grid *widget.TextGrid) {
 
 	for _, ln := range lines {
 		row := widget.TextGridRow{}
+		// 先頭記号で色を切り替え（ただしヘッダは除外）
 		var fg color.Color = def
 
 		switch {
@@ -147,16 +148,18 @@ func doDiff(left, right string, grid *widget.TextGrid) {
 			fg = def
 		}
 
+		// 1行をセルに分解して同色で塗る
 		cells := make([]widget.TextGridCell, len(ln))
 		for i, ch := range ln {
 			cells[i] = widget.TextGridCell{
 				Rune:  ch,
-				Style: widget.TextGridStyle{FGColor: fg},
+				Style: &widget.CustomTextGridStyle{FGColor: fg},
 			}
 		}
 		row.Cells = cells
 		grid.Rows = append(grid.Rows, row)
 	}
+
 	grid.Refresh()
 }
 
