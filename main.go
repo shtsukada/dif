@@ -53,4 +53,19 @@ func main() {
 		diffBtn, saveBtn,
 	)
 
+	//レイアウト
+	inputs := container.NewHSplit(
+		container.NewBorder(nil, nil, nil, nil, left),
+		container.NewBorder(nil, nil, nil, nil, right),
+	)
+	inputs.SetOffset(0.5)
+
+	w.SetContent(container.NewBorder(
+		topBar, nil, nil, nil,
+		container.NewVSplit(
+			inputs,
+			container.NewMax(grid),
+		),
+	))
+	w.ShowAndRun()
 }
