@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"image/color"
 	"io"
 	"strings"
@@ -87,6 +88,23 @@ func openFile(w fyne.Window, onLoad func([]byte)) {
 		onLoad(b)
 	}, w)
 	d.SetFilter(storage.NewExtensionFileFilter([]string{".txt", ".log", ".md", ".json", ".yaml", ".yml", ""}))
+	d.Show()
+}
+
+func saveDiff(w fyne.Window, grid *widget.TextGrid) {
+	d := dialog.NewFileSave(func(uw fyne.URIWriteCloser, err error) {
+		if err != nil || uw == nil {
+			return
+		}
+		defer uw.Close()
+		var buf bytes.Buffer
+		for _, row := range grid.Rows {
+			buf.WriteString(row.Text())
+			buf.WriteByte('\n')
+		}
+		_, _ = uw.Write(buf.Bytes())
+	}, w)
+	d.SetFileName("diff.txt")
 	d.Show()
 }
 
