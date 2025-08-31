@@ -2,4 +2,7 @@ module dif
 
 go 1.24.5
 
-require fyne.io/fyne/v2 v2.6.3 // indirect
+require (
+	fyne.io/fyne/v2 v2.6.3 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+)
