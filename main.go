@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"image/color"
 	"io"
@@ -48,7 +49,7 @@ func main() {
 		openFile(w, func(b []byte) { left.SetText(string(b)) })
 	})
 	openRightBtn := widget.NewButton("Open→", func() {
-		openFile(w, func(b []byte) { left.SetText(string(b)) })
+		openFile(w, func(b []byte) { right.SetText(string(b)) })
 	})
 	saveBtn := widget.NewButton("Save dif", func() {
 		saveDiff(w, grid)
@@ -157,4 +158,13 @@ func doDiff(left, right string, grid *widget.TextGrid) {
 		grid.Rows = append(grid.Rows, row)
 	}
 	grid.Refresh()
+}
+
+func splitLines(s string) []string {
+	var res []string
+	sc := bufio.NewScanner(strings.NewReader(s))
+	for sc.Scan() {
+		res = append(res, sc.Text())
+	}
+	return res
 }
